@@ -20,14 +20,10 @@
     git clone https://github.com/legolas237/stream_api.git
     cd stream_api
 
------
-<a name="step2"></a>
 ## Step 2: Install dependencies with Composer
 
     composer install
 
------
-<a name="step3"></a>
 ## Step 3: Create the Database
 
 Once you finished the first two steps, you can create the *MySQL* database server. You must create the database with `utf-8` collation (`utf8_general_ci`), for the application to work.  As admin login to *MySQL* database and then execute the following:
@@ -36,8 +32,6 @@ Once you finished the first two steps, you can create the *MySQL* database serve
     CREATE USER 'o_stream__dev'@'localhost' IDENTIFIED BY '<password>';
     GRANT ALL PRIVILEGES ON o_stream__dev.* TO'o_stream__dev'@'localhost';
 
------
-<a name="step4"></a>
 ## Step 4: Configure the Environment
 
 **Copy** the **.env.example** file to **.env**
@@ -81,10 +75,8 @@ And we are ready to go. **Run** the server:
 
     http://localhost:8000/
 
------
 Congrats! You have the running server
 
-<a name="troubleshooting"></a>
 ## Troubleshooting
 ### Memory limit errors
 
