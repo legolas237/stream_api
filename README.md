@@ -28,9 +28,9 @@
 
 Once you finished the first two steps, you can create the *MySQL* database server. You must create the database with `utf-8` collation (`utf8_general_ci`), for the application to work.  As admin login to *MySQL* database and then execute the following:
 
-    CREATE DATABASE o_stream__dev
-    CREATE USER 'o_stream__dev'@'localhost' IDENTIFIED BY '<password>';
-    GRANT ALL PRIVILEGES ON o_stream__dev.* TO'o_stream__dev'@'localhost';
+    CREATE DATABASE o_stream_dev
+    CREATE USER 'o_stream_dev'@'localhost' IDENTIFIED BY '<password>';
+    GRANT ALL PRIVILEGES ON o_stream_dev.* TO'o_stream_dev'@'localhost';
 
 ## Step 4: Configure the Environment
 
