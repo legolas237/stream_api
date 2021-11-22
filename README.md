@@ -1,67 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Installing
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+* [Requirements](#requirements)
+* [Step 1: Get the code](#step1)
+* [Step 2: Use Composer to install dependencies](#step2)
+* [Step 3: Create database](#step3)
+* [Step 4: Install](#step4)
+* [Troubleshooting](#troubleshooting)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<a name="requirements"></a>
+## Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* PHP ^7.3|^8.0
+* MySQL server
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<a name="step1"></a>
+## Step 1: Get the code
 
-## Learning Laravel
+    git clone https://github.com/legolas237/stream_api.git
+    cd stream_api
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-----
+<a name="step2"></a>
+## Step 2: Install dependencies with Composer
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    composer install
 
-## Laravel Sponsors
+-----
+<a name="step3"></a>
+## Step 3: Create the Database
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Once you finished the first two steps, you can create the *MySQL* database server. You must create the database with `utf-8` collation (`utf8_general_ci`), for the application to work.  As admin login to *MySQL* database and then execute the following:
 
-### Premium Partners
+    CREATE DATABASE o_stream__dev
+    CREATE USER 'o_stream__dev'@'localhost' IDENTIFIED BY '<password>';
+    GRANT ALL PRIVILEGES ON o_stream__dev.* TO'o_stream__dev'@'localhost';
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+-----
+<a name="step4"></a>
+## Step 4: Configure the Environment
 
-## Contributing
+**Copy** the **.env.example** file to **.env**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    cp .env.example .env
 
-## Code of Conduct
+**Edit** the `.env` file and set the database configuration among the other settings.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Set database infomation
 
-## Security Vulnerabilities
+    DB_DATABASE=o_stream_dev
+    DB_USERNAME=o_stream_dev
+    DB_PASSWORD=<password>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Clear configuration cache
 
-## License
+     php artisan config:cache
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# stream_api" 
+Regenerate Composer's autoloader using the *dump-autoload* command
+
+    composer dump-autoload
+
+Set the application key
+
+    php artisan key:generate
+    php artisan jwt:secret
+
+**Create** new schema in your database.  **Note**: make sure that your run *php artisan config:cache* and *composer dump-autoload* prior to executing any migration or seed steps
+
+    php artisan migrate
+
+**Populate** the database. **Note**: run seed only if you have not migrated old data from the previous step.
+
+    php artisan db:seed
+
+And we are ready to go. **Run** the server:
+
+    php artisan serve
+
+**Type** on web browser:
+
+    http://localhost:8000/
+
+-----
+Congrats! You have the running server
+
+<a name="troubleshooting"></a>
+## Troubleshooting
+### Memory limit errors
+
+Composer may sometimes fail on some commands with this message:
+
+    PHP Fatal error: Allowed memory size of XXXXXX bytes exhausted <...>
+
+Try increasing the limit in your php.ini file (ex. */etc/php5/cli/php.ini* for Debian-like systems):
+
+    ; Use -1 for unlimited or define an explicit value like 2G
+    memory_limit = -1
+
+Composer also respects a memory limit defined by the COMPOSER_MEMORY_LIMIT environment variable:
+
+    export COMPOSER_MEMORY_LIMIT=-1
+    composer <...>
