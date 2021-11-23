@@ -11,5 +11,6 @@ return [
     */
 
     'hello' => 'Hello world',
+    'user_exist' => 'User exist',
 
 ];

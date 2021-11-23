@@ -18,6 +18,7 @@ class CountrySeeder extends Seeder
     {
         $phoneUtil = PhoneNumberUtil::getInstance();
         $countries = $phoneUtil->getSupportedRegions();
+        $supportedCountries = config('osm.default_countries');
 
         foreach ($countries as $countryCode) {
             $dialCode = $phoneUtil->getCountryCodeForRegion($countryCode);
@@ -30,7 +31,7 @@ class CountrySeeder extends Seeder
                     ),
                     'country_code' => $dialCode,
                     'alpha_code' => strtoupper($countryCode),
-                    'activated_at' => null,
+                    'activated_at' => in_array(strtoupper($countryCode), $supportedCountries) ? now() : null,
                 ]);
             }
         }

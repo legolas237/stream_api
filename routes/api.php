@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Platform\CountryController;
+use App\Http\Controllers\Api\Platform\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,11 @@ Route::group(['prefix' => 'v1', 'middleware' => 'intl'], function () {
 
             Route::group(['prefix' => 'countries'], function ($router) {
                 Route::get('', [CountryController::class, 'allSupportedCountries']);
+            });
+
+            Route::group(['prefix' => 'users'], function ($router) {
+                Route::get('username/{userName}', [UserController::class, 'findByUsername']);
+                Route::get('email/{email}', [UserController::class, 'findByEmail']);
             });
 
         });

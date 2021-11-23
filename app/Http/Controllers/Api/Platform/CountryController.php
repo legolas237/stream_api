@@ -10,6 +10,7 @@ class CountryController extends Controller
 
     /**
      * All countries
+     * 100: Okay
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
