@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_details', function (Blueprint $table) {
+        Schema::create('phone_codes', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('telephone', 50)->unique()->nullable();
-            $table->string('email', 255)->unique()->nullable();
-            $table->string('username', 255)->unique();
-
-            $table->string('last_name', 255);
-            $table->string('first_name', 255);
-            $table->date('data_of_birth');
+            $table->string('telephone', 50)->unique();
+            $table->string('code', config('osm.constants.otp_length'));
+            $table->timestamp('last_generation');
+            $table->timestamp('validity');
 
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
@@ -37,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_details');
+        Schema::dropIfExists('phone_codes');
     }
 };

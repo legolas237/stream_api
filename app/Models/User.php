@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -45,11 +46,26 @@ class User extends Authenticatable
     ];
 
     /**
-     * Relations
+     * Relations functions
      */
 
     public function userDetail(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(UserDetail::class);
     }
+
+    public function device(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Device::class);
+    }
+
+    /**
+     * Others callback
+     */
+
+    public function verifyPassword(string $plainTextPassword): bool
+    {
+        return Hash::check($plainTextPassword, $this->{'password'});
+    }
+
 }

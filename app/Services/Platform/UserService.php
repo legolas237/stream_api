@@ -35,4 +35,20 @@ trait UserService
         })->first();
     }
 
+    /**
+     * Find user for authentication
+     *
+     * @param string $username
+     * @return Builder|Model|object|null
+     */
+    public static function findForAuthentication(string $username)
+    {
+        return User::query()->whereHas("userDetail", function(Builder $query) use($username) {
+            $query
+                ->where('username', $username)
+                ->orWhere('email', $username)
+                ->orWhere('telephone', $username);
+        })->first();
+    }
+
 }

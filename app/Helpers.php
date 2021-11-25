@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
+
 if (!function_exists('api_response')) {
     /**
      * Generic response format
@@ -7,7 +11,7 @@ if (!function_exists('api_response')) {
      * @param int $code
      * @param string|null $message
      * @param null $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      */
     function api_response(int $code, string $message = null, $data = null)
     {

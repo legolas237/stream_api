@@ -21,6 +21,7 @@ return [
       */
     'constants' => [
         'paginator_per_page' => 100,
+        'otp_length' => 6,
     ],
 
     /*

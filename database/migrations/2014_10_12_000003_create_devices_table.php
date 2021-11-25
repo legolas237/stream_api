@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_details', function (Blueprint $table) {
+        Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('telephone', 50)->unique()->nullable();
-            $table->string('email', 255)->unique()->nullable();
-            $table->string('username', 255)->unique();
-
-            $table->string('last_name', 255);
-            $table->string('first_name', 255);
-            $table->date('data_of_birth');
+            $table->string('name');
+            $table->string('device_id')->nullable();
+            $table->string('os');
+            $table->string('ip')->nullable();
+            $table->string('mac');
 
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
@@ -37,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_details');
+        Schema::dropIfExists('devices');
     }
 };
