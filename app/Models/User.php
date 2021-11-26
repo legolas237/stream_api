@@ -20,10 +20,12 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
         'password',
         'avatar',
+        'email_verified_at',
+
+        'device_id',
+        'user_detail_id'
     ];
 
     /**
@@ -34,16 +36,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'device_id',
+        'user_detail_id',
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 
     /**
      * Relations functions
@@ -66,6 +68,17 @@ class User extends Authenticatable
     public function verifyPassword(string $plainTextPassword): bool
     {
         return Hash::check($plainTextPassword, $this->{'password'});
+    }
+
+    /**
+     * Utilities attributes
+     */
+
+    public static function creationAttributes(): array
+    {
+        return  [
+            'password',
+        ];
     }
 
 }

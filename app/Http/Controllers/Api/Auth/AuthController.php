@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class AuthController extends Controller
@@ -23,7 +22,7 @@ class AuthController extends Controller
         $user->tokens()->delete();
 
         // Create new token
-        $token = $user->createToken($user->{'device'} !== null ? $user->{'device'}->{'name'} :  "Personal Access Token");
+        $token = $user->createToken($user->{'device'} !== null ? $user->{'device'}->{'device_name'} :  "Personal Access Token");
 
         return api_response(100, 'Ok', $token);
     }
@@ -41,7 +40,7 @@ class AuthController extends Controller
         // Revoke all tokens...
         $user->tokens()->delete();
 
-        return api_response(100, 'Successfully logged out.');
+        return api_response(100, 'Ok');
     }
 
     /**
@@ -50,14 +49,14 @@ class AuthController extends Controller
      * Use the following codes
      * 100: Ok
      *
-     * @param Request $request
      * @return ResponseFactory|Response
      */
-    protected function user(Request $request)
+    protected function user()
     {
         /** @var $user  User*/
         $user = auth()->user();
 
         return api_response(100, 'Ok',  $user);
     }
+
 }

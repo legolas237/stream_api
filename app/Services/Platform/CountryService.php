@@ -3,6 +3,8 @@
 namespace App\Services\Platform;
 
 use App\Models\Country;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 trait CountryService
 {
@@ -14,7 +16,7 @@ trait CountryService
      * @param bool $activated
      * @param int|null $currentPage
      * @param int|null $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public static function allCountries(bool $paginate = false, bool $activated = true, int $currentPage = null, int $perPage = null)
     {
@@ -34,6 +36,17 @@ trait CountryService
         }
 
         return $queryBuilder->orderBy('designation')->get();
+    }
+
+    /**
+     * Find by country code
+     *
+     * @param string $countryCode
+     * @return Builder|Model|object|null
+     */
+    public static function findByCountryCode(string $countryCode)
+    {
+        return Country::query()->where('alpha_code', strtoupper($countryCode))->first();
     }
 
 }

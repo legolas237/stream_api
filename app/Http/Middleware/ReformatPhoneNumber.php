@@ -18,9 +18,9 @@ class ReformatPhoneNumber
      */
     public function handle($request, Closure $next)
     {
-        $username = $request->get('username');
-        $telephone = $request->get('telephone');
-        $phoneNumber = $request->get('phone_number');
+        $username = $request->{'username'};
+        $telephone = $request->{'telephone'};
+        $phoneNumber = $request->{'phone_number'};
 
         if(! empty($username)) $this->applyVerification($request, 'username', $username);
         if(! empty($telephone)) $this->applyVerification($request, 'telephone', $telephone);

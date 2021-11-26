@@ -12,5 +12,6 @@ return [
 
     'hello' => 'Hello world',
     'user_exist' => 'User exist',
+    'otp_sms_sent' => 'The code has been sent'
 
 ];

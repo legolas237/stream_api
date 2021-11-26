@@ -17,16 +17,13 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
 
             $table->timestamp('email_verified_at')->nullable();
-            $table->timestamp('telephone_verified_at')->nullable();
             $table->string('password');
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
 
             $table->bigInteger('user_detail_id')->unsigned();
             $table->foreign('user_detail_id')->references('id')->on('user_details');
             $table->bigInteger('device_id')->unsigned()->nullable();
             $table->foreign('device_id')->references('id')->on('devices');
-            $table->bigInteger('phone_code_id')->unsigned()->nullable();
-            $table->foreign('phone_code_id')->references('id')->on('phone_codes');
 
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();

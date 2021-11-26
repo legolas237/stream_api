@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('name');
+            $table->string('device_name');
             $table->string('device_id')->nullable();
             $table->string('os');
             $table->string('ip')->nullable();

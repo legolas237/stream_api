@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Platform\UserDetailService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ class UserDetail extends Model
 
     use SoftDeletes;
     use HasFactory;
+    use UserDetailService;
 
     /**
      * The database table used by the model.
@@ -53,4 +55,20 @@ class UserDetail extends Model
      * @var array
      */
     protected $dates = ['data_of_birth', 'created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * Utilities attributes
+     */
+
+    public static function creationAttributes(): array
+    {
+        return  [
+            'telephone',
+            'username',
+            'email',
+            'last_name',
+            'first_name',
+            'data_of_birth',
+        ];
+    }
 }

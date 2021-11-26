@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('code', config('osm.constants.otp_length'));
             $table->timestamp('last_generation');
             $table->timestamp('validity');
+            $table->timestamp('checked_at')->nullable();
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();

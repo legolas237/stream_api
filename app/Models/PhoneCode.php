@@ -2,35 +2,35 @@
 
 namespace App\Models;
 
-use App\Services\Platform\DeviceService;
+use App\Services\Platform\PhoneCodeService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Device extends Model
+class PhoneCode extends Model
 {
     use SoftDeletes;
-    use DeviceService;
+    use PhoneCodeService;
 
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'devices';
+    protected $table = 'phone_codes';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = ['device_name', 'device_id', 'ip', 'os', 'mac'];
+    protected $fillable = ['telephone', 'code', 'last_generation', 'validity', 'checked_at', 'user_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['user_id'];
 
     /**
      * The attributes that should be casted to native types.
@@ -40,11 +40,18 @@ class Device extends Model
     protected $casts = [];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['native_name'];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_generation', 'validity', 'checked_at'];
 
     /**
      * The "booting" method of the model.
@@ -57,17 +64,11 @@ class Device extends Model
     }
 
     /**
-     * Utilities attributes
+     * Relations functions
      */
 
-    public static function creationAttributes(): array
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return  [
-            'device_name',
-            'device_id',
-            'ip',
-            'os',
-            'mac'
-        ];
+        return $this->belongsTo(User::class);
     }
 }

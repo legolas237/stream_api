@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\Device;
+use App\Models\PhoneCode;
 use App\Models\User;
 use App\RequestRules\UserRules;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends AuthController
@@ -19,6 +22,8 @@ class LoginController extends AuthController
      * 150: Validation error
      * 101: Unknown user
      * 100: Okay
+     * 102: Unable telephone
+     * 103: Error
      *
      * @param Request $request
      * @return ResponseFactory|Response
@@ -29,17 +34,38 @@ class LoginController extends AuthController
     {
         $this->validate($request, UserRules::authenticationRules());
 
-        $username = $request->{'username'};
+        $telephone = $request->{'telephone'};
         $password = $request->{'password'};
 
-        /** @var $user User */
-        $user = User::findForAuthentication($username);
-
-        if($user !== null && $user->verifyPassword($password)){
-            return $this->respondWithToken($user);
+        $phoneCode = PhoneCode::findByPhoneNumber($telephone);
+        if($phoneCode === null || ! $phoneCode->isVerified()) {
+            return api_response(102, __('errors.unable_telephone'));
         }
 
-        return api_response(101, __('errors.unknown_user', ['username' => $username]));
+        /** @var $user User */
+        $user = User::findForAuthentication($telephone);
+
+        if($user !== null && $user->verifyPassword($password)){
+            $deviceData = Arr::only($request->all(), Device::creationAttributes());
+
+            try{
+                // Handle device
+                $device = Device::handleDeviceForLogin($deviceData, $user->{'device'});
+
+                // Update device if necessary
+                $user->handleDeviceForLogin($device);
+
+                // Update phone code reference if necessary
+                $phoneCode->updatePhoneCodeReference($user);
+            } catch (\Exception $exception) {
+                debug_log($exception, 'LoginController::authenticate');
+                return api_response(103, __('messages.error'));
+            }
+
+            return $this->respondWithToken($user->refresh());
+        }
+
+        return api_response(101, __('errors.unknown_user', ['username' => $telephone]));
     }
 
 }
