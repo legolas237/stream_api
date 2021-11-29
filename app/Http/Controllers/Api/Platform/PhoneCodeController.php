@@ -61,7 +61,7 @@ class PhoneCodeController extends Controller
      * 101: Expires code
      * 100: Okay
      * 103: Invalid
-     * 102: Error
+     * 104: Error
      * 102: Success with existing user account
      *
      * @param Request $request
@@ -75,8 +75,6 @@ class PhoneCodeController extends Controller
         $phoneCode = PhoneCode::findByPhoneNumber($request->{'telephone'});
 
         if ($phoneCode !== null && $phoneCode->verify($request->{'otp'})) {
-            $accountExist = $phoneCode->{'user'} !== null;
-
             if ($phoneCode->isExpired()) {
                 return api_response(101, __('errors.otp_expired'));
             }
@@ -85,10 +83,10 @@ class PhoneCodeController extends Controller
                 $phoneCode->markAsVerified();
             } catch (\Exception $exception) {
                 debug_log($exception, 'PhoneCodeController::verify');
-                return api_response(102, __('messages.error'));
+                return api_response(104, __('messages.error'));
             }
 
-            return api_response($accountExist ? 102 : 100, 'Ok');
+            return api_response(100, 'Ok');
         }
 
         return api_response(103, __('errors.invalid_otp_code'));
