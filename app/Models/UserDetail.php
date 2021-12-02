@@ -28,10 +28,8 @@ class UserDetail extends Model
      */
     protected $fillable = [
         'telephone',
-        'username',
         'email',
-        'last_name',
-        'first_name',
+        'name',
         'data_of_birth',
     ];
 
@@ -64,10 +62,8 @@ class UserDetail extends Model
     {
         return  [
             'telephone',
-            'username',
             'email',
-            'last_name',
-            'first_name',
+            'name',
             'data_of_birth',
         ];
     }

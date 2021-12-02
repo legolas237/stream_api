@@ -37,8 +37,9 @@ class LoginController extends AuthController
         $telephone = $request->{'telephone'};
         $password = $request->{'password'};
 
+        /** @var PhoneCode $phoneCode */
         $phoneCode = PhoneCode::findByPhoneNumber($telephone);
-        if($phoneCode === null || ! $phoneCode->isVerified()) {
+        if($phoneCode === null || ! $phoneCode->isVerified() || $phoneCode->{'user'} === null) {
             return api_response(102, __('errors.unable_telephone'));
         }
 
@@ -54,9 +55,6 @@ class LoginController extends AuthController
 
                 // Update device if necessary
                 $user->handleDeviceForLogin($device);
-
-                // Update phone code reference if necessary
-                $phoneCode->updatePhoneCodeReference($user);
             } catch (\Exception $exception) {
                 debug_log($exception, 'LoginController::authenticate');
                 return api_response(103, __('messages.error'));

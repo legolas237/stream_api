@@ -8,6 +8,18 @@ class UserRules
 {
 
     /**
+     * Telephone verification rules
+     *
+     * @return array
+     */
+    public static function checkTelephone(): array
+    {
+        return [
+            'telephone' => ['required', 'string', new PhoneNumberRule()],
+        ];
+    }
+
+    /**
      * Authentication rules
      *
      * @return array
@@ -22,7 +34,6 @@ class UserRules
             'device_id' => 'string',
             'ip' => 'string',
             'os' => 'required|string',
-            'mac' => 'required|string',
         ];
     }
 
@@ -36,16 +47,12 @@ class UserRules
         return [
             'password' => 'required|string',
             'telephone' => ['required', 'string', new PhoneNumberRule()],
-            'username' => 'required|string',
-            'email' => 'required|string|email',
-            'last_name' => 'required|string',
-            'first_name' => 'required|string',
+            'name' => 'required|string',
             'data_of_birth' => ['required', 'string', 'date_format:' . config('osm.formats.date')],
             'device_name' => 'required|string',
-            'device_id' => 'string',
             'ip' => 'string',
             'os' => 'required|string',
-            'mac' => 'required|string',
+            'device_id' => 'required|string',
         ];
     }
 

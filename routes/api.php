@@ -62,8 +62,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'intl'], function () {
         });
 
         Route::group(['prefix' => 'users'], function ($router) {
-            $router->get('username/{userName}', [UserController::class, 'findByUsername']);
             $router->get('email/{email}', [UserController::class, 'findByEmail']);
+            $router->post('verify-telephone', [UserController::class, 'findByTelephone']);
         });
     });
 

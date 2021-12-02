@@ -17,10 +17,9 @@ return new class extends Migration
             $table->bigIncrements('id');
 
             $table->string('device_name');
-            $table->string('device_id')->nullable();
+            $table->string('device_id');
             $table->string('os');
             $table->string('ip')->nullable();
-            $table->string('mac');
 
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();

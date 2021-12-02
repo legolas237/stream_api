@@ -40,19 +40,6 @@ trait UserService
     }
 
     /**
-     * Find user by username
-     *
-     * @param string $userName
-     * @return Builder|Model|object|null
-     */
-    public static function findByUsername(string $userName)
-    {
-        return User::query()->whereHas("userDetail", function(Builder $query) use($userName) {
-            $query->where('username', $userName);
-        })->first();
-    }
-
-    /**
      * Find user using email
      *
      * @param string $email

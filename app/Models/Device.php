@@ -23,7 +23,7 @@ class Device extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['device_name', 'device_id', 'ip', 'os', 'mac'];
+    protected $fillable = ['device_name', 'device_id', 'ip', 'os'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -67,7 +67,6 @@ class Device extends Model
             'device_id',
             'ip',
             'os',
-            'mac'
         ];
     }
 }

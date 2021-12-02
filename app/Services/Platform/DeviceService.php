@@ -43,8 +43,8 @@ trait DeviceService
 
         if($device === null){
             $device = Device::store($deviceData);
-        } elseif ($device->{'mac'} !== $data['mac']) {
-            $device =  $device->updateService($deviceData);
+        } elseif ($device->{'device_id'} !== $data['device_id']) {
+            $device = $device->updateService($deviceData);
         }
 
         return $device;

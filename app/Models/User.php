@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Sanctum\PersonalAccessToken;
 use App\Services\Platform\UserService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,8 +49,27 @@ class User extends Authenticatable
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function (User $user) {
+            $user->load(['userDetail']);
+        });
+    }
+
+    /**
      * Relations functions
      */
+
+    public function tokens(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
+    }
 
     public function userDetail(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

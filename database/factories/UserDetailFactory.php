@@ -15,10 +15,8 @@ class UserDetailFactory extends Factory
     {
         return [
             'telephone' => "+237678370695",
-            'username' => $this->faker->userName,
             'email' => $this->faker->email,
-            'last_name' => $this->faker->lastName,
-            'first_name' => $this->faker->firstName,
+            'name' => $this->faker->name,
             'data_of_birth' => $this->faker->date(),
         ];
     }
