@@ -31,7 +31,7 @@ class CountrySeeder extends Seeder
                     ),
                     'country_code' => $dialCode,
                     'alpha_code' => strtoupper($countryCode),
-                    'activated_at' => in_array(strtoupper($countryCode), $supportedCountries) ? now() : null,
+                    'activated_at' => now(),
                 ]);
             }
         }
