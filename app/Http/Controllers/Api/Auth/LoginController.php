@@ -63,7 +63,7 @@ class LoginController extends AuthController
             return $this->respondWithToken($user->refresh());
         }
 
-        return api_response(101, __('errors.unknown_user', ['username' => $telephone]));
+        return api_response(101, __('errors.unknown_user'));
     }
 
 }

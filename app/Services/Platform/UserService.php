@@ -6,7 +6,9 @@ use App\Models\Device;
 use App\Models\PhoneCode;
 use App\Models\User;
 use App\Models\UserDetail;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +68,17 @@ trait UserService
     }
 
     /**
+     * Find by id
+     *
+     * @param int $id
+     * @return Builder|Builder[]|Collection|Model|null
+     */
+    public static function findById(int $id)
+    {
+        return User::query()->find($id);
+    }
+
+    /**
      * Update user
      *
      * @param array $data
@@ -119,6 +132,29 @@ trait UserService
         } catch (\Exception $exception) {
             debug_log($exception, 'UserService::registration');
             DB::rollBack();
+        }
+
+        return $user;
+    }
+
+    /**
+     * Upload avatar
+     *
+     * @param UploadedFile $file
+     * @return User|mixed
+     */
+    public function uploadAvatar(UploadedFile $file)
+    {
+        $user = $this;
+
+        $result = store_document(
+            sprintf(config('osm.paths.docs'), 'user-' . $this->{'id'}),
+            config('osm.doc_types.avatar'),
+            $file,
+        );
+
+        if(filled($result)) {
+            $user = $this->updateService(['avatar' => $result]);
         }
 
         return $user;

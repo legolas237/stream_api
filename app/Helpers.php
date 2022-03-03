@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('api_response')) {
@@ -80,5 +82,87 @@ if (!function_exists('debug_log')) {
         } else {
             Log::info($message);
         }
+    }
+}
+
+if (!function_exists('unique_image_file_name')) {
+    /**
+     * Generate unique file name
+     *
+     * @param string $prefix
+     * @return string
+     */
+    function unique_image_file_name(string $prefix): string
+    {
+        return uniqid(strtolower($prefix) . '_')
+            . '_' . now()->timestamp
+            . config('osm.formats.default_image_file_extension');
+    }
+}
+
+if (!function_exists('build_user_avatar_url')) {
+    /**
+     * Build user avatar url
+     *
+     * @param User $user
+     * @return string
+     */
+    function build_user_avatar_url(User $user)
+    {
+        return route(
+            'serve.user.avatar',
+            ['userId' => $user->{'id'}, 'file' => $user->{'avatar'}]
+        );
+    }
+}
+
+if (!function_exists('absolute_doc_path')) {
+    /**
+     * Builds the path to documents
+     *
+     * @param $modelInstance
+     * @param string $docName
+     * @param string $prefix
+     * @return string|null
+     */
+    function absolute_doc_path($modelInstance, string $docName, string $prefix): ?string
+    {
+        if (empty($docName)) {
+            return null;
+        }
+
+        if ($modelInstance === null) {
+            return null;
+        }
+
+        $docPath = sprintf('%s/%s', $prefix . $modelInstance->{'id'}, $docName);
+        $fullPath = sprintf(config('osm.paths.docs'), $docPath);
+
+        return $fullPath;
+    }
+}
+
+if (!function_exists('store_document')) {
+    /**
+     * Save single document on the server
+     *
+     * @param string $basePath
+     * @param string $type
+     * @param UploadedFile $uploadFile
+     * @return string|null
+     */
+    function store_document(string $basePath, string $type, UploadedFile $uploadFile): ?string
+    {
+        $storageOption = config('osm.storage_option');
+        $fileName = unique_image_file_name($type);
+
+        try {
+            $uploadFile->storeAs($basePath, $fileName, $storageOption);
+        } catch (\Exception $exception) {
+            debug_log($exception, 'Upload::File ' . $exception->getMessage());
+            $fileName = null;
+        }
+
+        return $fileName;
     }
 }

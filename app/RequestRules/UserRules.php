@@ -56,4 +56,16 @@ class UserRules
         ];
     }
 
+    /**
+     * Upload avatar rules
+     *
+     * @return array
+     */
+    public static function uploadAvatarRules(): array
+    {
+        return [
+            'avatar' =>  'required|image|max:2048|mimes:jpg,png,gif,jpeg', // 1 MB
+        ];
+    }
+
 }

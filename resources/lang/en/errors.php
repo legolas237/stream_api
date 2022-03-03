@@ -12,7 +12,7 @@ return [
 
     "error" => "Oops! An error has occurred",
     'validation_error' => 'Validation error. Some data is incorrect',
-    'unknown_user' => 'Unknown user with ":username" phone number',
+    'unknown_user' => 'Unknown user. Your password is incorrect',
     'invalid_telephone' => 'Invalid phone number',
     'unsupported_country' => 'Unsupported country',
     'otp_expired' => 'Expired code',

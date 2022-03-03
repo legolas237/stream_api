@@ -49,6 +49,13 @@ class User extends Authenticatable
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['profile_picture'];
+
+    /**
      * The "booting" method of the model.
      *
      * @return void
@@ -60,6 +67,15 @@ class User extends Authenticatable
         static::retrieved(function (User $user) {
             $user->load(['userDetail']);
         });
+    }
+
+    public function getProfilePictureAttribute()
+    {
+        if(filled($this->{'avatar'})){
+            return build_user_avatar_url($this);
+        }
+
+        return null;
     }
 
     /**

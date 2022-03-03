@@ -41,7 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'intl'], function () {
      * Otp
      */
     Route::group(['prefix' => 'otp'], function ($router) {
-        Route::group(["middleware" => "format-phone"], function ($router) {
+        $router->group(["middleware" => "format-phone"], function ($router) {
             $router->post('send', [PhoneCodeController::class, 'send']);
             $router->put('verify', [PhoneCodeController::class, 'verify']);
         });
@@ -51,19 +51,23 @@ Route::group(['prefix' => 'v1', 'middleware' => 'intl'], function () {
      * Protected routes
      */
     Route::group(["middleware" => "auth:sanctum"], function ($router) {
+        $router->group(["prefix" => "users"], function ($router) {
+            $router->post('avatar', [UserController::class, 'uploadAvatar']);
+        });
     });
 
     /**
      * Public routes
      */
     Route::group(['prefix' => 'public'], function ($router) {
-        Route::group(['prefix' => 'countries'], function ($router) {
+        $router->group(['prefix' => 'countries'], function ($router) {
             $router->get('', [CountryController::class, 'allSupportedCountries']);
         });
 
-        Route::group(['prefix' => 'users'], function ($router) {
+        $router->group(['prefix' => 'users'], function ($router) {
             $router->get('email/{email}', [UserController::class, 'findByEmail']);
             $router->post('verify-telephone', [UserController::class, 'findByTelephone']);
+            Route::get('{userId}/avatar', [UserController::class, 'serveAvatar'])->name('serve.user.avatar');
         });
     });
 
